@@ -202,10 +202,10 @@
                                 "Content-Type": "application/json",
                                 "Authorization": `Bearer ${GROQ_API_KEY}`
                             },
-                            body: JSON.stringify({
+                              body: JSON.stringify({
                                 model: "deepseek-r1-distill-qwen-32b",
                                 messages: [
-                                { role: "system", content: "You are an English language correction assistant. Your task is to provide only the grammatically correct version of the user's input. Do not add explanations, suggestions, or any extra text. Simply return the single more natural corrected sentence." },
+                                { role: "system", content: "You are an English language correction assistant. Your task is to provide only the grammatically correct version of the user's input. Concentrate on sentence formation and spelling mistakes; do not correct punctuation marks, and ignore punctuation, capital, and small letter corrections. If the user's sentence is correct, just reply with this statement: 'Correct, You are Doing Great Keep Going ✅'. Do not add explanations, suggestions, or any extra text. Simply return the single, more natural corrected sentence." },
                                 { role: "user", content: userMessage }
                             ],
                             max_tokens: 1000
