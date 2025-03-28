@@ -203,17 +203,28 @@
                                 "Authorization": `Bearer ${GROQ_API_KEY}`
                             },
                             body: JSON.stringify({
-                                model: "llama-3.3-70b-versatile",
+                                model: "deepseek-r1-distill-qwen-32b",
                                 messages: [
-                                { role: "system", content: "You are an English language correction assistant. Your task is to provide only the corrected version of the user's input without any explanations or suggestions. Simply return the corrected text." },
+                                { role: "system", content: "You are an English language correction assistant. Your task is to provide only the grammatically correct version of the user's input. Do not add explanations, suggestions, or any extra text. Simply return the single more natural corrected sentence." },
                                 { role: "user", content: userMessage }
-                            ]
+                            ],
+                            max_tokens: 1000
                             })
                         });
 
                         const data = await response.json();
                         const aiResponse = data.choices[0].message.content;
-                        this.messages.push({ type: 'ai', text: aiResponse });
+                        let correctedSentence=aiResponse;
+                        if (data.choices && data.choices.length > 0) {
+                             correctedSentence = data.choices[0].message.content;
+
+                            // Remove anything within <think> tags
+                            correctedSentence = correctedSentence.replace(/<think>.*?<\/think>\s*/s, '');
+                        }
+
+
+                       
+                        this.messages.push({ type: 'ai', text: correctedSentence });
                     } catch (error) {
                         console.error("Error getting AI response:", error);
                         this.messages.push({ type: 'ai', text: "Sorry, I encountered an error. Please try again." });
